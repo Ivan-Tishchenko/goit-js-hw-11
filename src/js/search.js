@@ -6,9 +6,9 @@ export default async function searchImages(text) {
         if (!response.ok) {
             throw new Error(response.status);
         }
-        return response;
+        return response.json();
     }).catch(error => {
-        console.log(error.mesage);
+        console.log(error);
     });
 
     return serverAnsvear;
