@@ -16,4 +16,4 @@ console.log(searchImages("red")
         }
     }).catch(error => {
         console.log(error.mesage);
-    }););
+    }));
