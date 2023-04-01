@@ -6,7 +6,7 @@ console.log(searchImages("red"));
  async function searchImages(text) {
     const serverAnsvear = await axios.get(`https://pixabay.com/api/?key=34918981-d8b731f885ecb543159a62dfc&q=${text.split(" ").join("+")}&image_type=photo&orientation=horizontal&safesearch=true`)
         .then(response => {
-        if ( !response.ok || !response.status == 200) {
+        if ( !response.ok && !response.status == 200) {
         throw new Error(response.status);
         }
         return response.json();
