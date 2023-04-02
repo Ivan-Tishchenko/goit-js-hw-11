@@ -2,7 +2,7 @@
 
 
 .load-more {  
-    &.dosplay-none {
+    &.display-none {
         display: none;
     }
     display: block;
@@ -21,5 +21,4 @@
 .gallery__link {
     display: block;
     text-decoration: none;
-    height: 100%;
 }

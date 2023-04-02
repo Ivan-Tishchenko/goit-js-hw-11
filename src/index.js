@@ -13,6 +13,7 @@ buttonLodeMore.addEventListener("click", build);
 
 let value = null;
 let page = 1;
+let gallery = new SimpleLightbox('.gallery a');
 
 
 async function serch(event) {
@@ -26,20 +27,27 @@ async function serch(event) {
     page = 1;
     value = input.value.trim();
 
+    if (input.value.trim().length <= 0) {
+        return
+    }
+    
     try {
-        if (input.value.trim().length <= 0) {
-            return
-        }
-       
         const serverAnsvear = await searchImages(input.value, 1);
-        console.log(serverAnsvear)
         if (serverAnsvear.total === 0) {
             Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
             return;
         }
+        Notiflix.Notify.info(`Hooray! We found ${serverAnsvear.total} images.`)
+
+        if (!buttonLodeMore.classList.contains("display-none")) {
+            buttonLodeMore.classList.add("display-none")
+        }
 
         build()
-        buttonLodeMore.classList.remove("dosplay-none");
+        if (serverAnsvear.total > 40) {
+            buttonLodeMore.classList.remove("display-none");
+        }
+        
         return;
     } catch (error) {
         Notiflix.Notify.failure("error: " + error.massege)
@@ -47,7 +55,7 @@ async function serch(event) {
 }
 
 async function searchImages(text, numberOfPage) {
-    const serverAnsvear = await axios.get(`https://pixabay.com/api/?key=34918981-d8b731f885ecb543159a62dfc&q=${text.split(" ").join("+")}&image_type=photo&orientation=horizontal&safesearch=true&page=${numberOfPage}&per_page=40`)
+    const serverAnsvear = await axios.get(`https://pixabay.com/api/?key=34918981-d8b731f885ecb543159a62dfc&q=${text.split(" ").join("+")}&image_type=photo&orientation=horizontal&safesearch=true&page=${numberOfPage}&per_page=${numberOfPage === 13 ? 20 : 40}`)
         
 
     return serverAnsvear.data;
@@ -55,11 +63,17 @@ async function searchImages(text, numberOfPage) {
 
 async function build() {
     const imagesToPage = await searchImages(value, page);
+    if (imagesToPage.hits.length < 40) {
+        Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
+        buttonLodeMore.classList.add("display-none")
+    }
     try {
         for (let i = 0; imagesToPage.hits.length > i; i += 1) {
-            galleryEl.insertAdjacentHTML("beforeend", `<a class="gallery__link" href=${imagesToPage.hits[i].largeImageURL}>
+            galleryEl.insertAdjacentHTML("beforeend", `
             <div class="photo-card">
+            <a class="gallery__link" href=${imagesToPage.hits[i].largeImageURL}>
             <img src=${imagesToPage.hits[i].webformatURL} alt=${imagesToPage.hits[i].tags} href=${imagesToPage.hits[i].largeImageURL} loading="lazy" width="360"/>
+            </a>
             <div class="info">
             <p class="info-item">
             <b>Likes</br>${imagesToPage.hits[i].likes}</b>
@@ -75,10 +89,11 @@ async function build() {
             </p>
             </div>
             </div>
-            </a>`);
+            `);
         };
 
         page += 1;
+        gallery.refresh(); 
     } catch (error) {
         Notiflix.Notify.failure("error: " + error.massege)
     }
@@ -87,22 +102,4 @@ async function build() {
 
 function clear() {
     [...galleryEl.children].forEach(element => element.remove());
-    console.log(galleryEl.children)
 }
-
-galleryEl.addEventListener("click", openImg);
-let gallery = new SimpleLightbox('.gallery a');
-
-
-gallery.defaultOptions.captions = true;
-gallery.defaultOptions.captionsData = "alt";
-gallery.defaultOptions.captionDelay = 250;
-
-
-
-function openImg(event) {
-    event.preventDefault();
-    
-    gallery.open(event.target);
-        
-    }
