@@ -57,10 +57,9 @@ async function build() {
     const imagesToPage = await searchImages(value, page);
     try {
         for (let i = 0; imagesToPage.hits.length > i; i += 1) {
-            gallery.insertAdjacentHTML("beforeend", `<div class="photo-card">
-            <a href=${imagesToPage.hits[i].largeImageURL}>
+            gallery.insertAdjacentHTML("beforeend", `<a href=${imagesToPage.hits[i].largeImageURL}>
+            <div class="photo-card">
             <img src=${imagesToPage.hits[i].webformatURL} alt=${imagesToPage.hits[i].tags}  loading="lazy" width="360"/>
-            </a>
             <div class="info">
             <p class="info-item">
             <b>Likes</br>${imagesToPage.hits[i].likes}</b>
@@ -75,8 +74,8 @@ async function build() {
             <b>Downloads</br>${imagesToPage.hits[i].downloads}</b>
             </p>
             </div>
-            
-            </div>`);
+            </div>
+            </a>`);
         };
 
         page += 1;
