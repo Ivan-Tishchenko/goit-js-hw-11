@@ -1,5 +1,6 @@
 import axios from "axios";
 import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css"
 import Notiflix from "notiflix";
 
 const form = document.querySelector("#search-form");
@@ -58,23 +59,24 @@ async function build() {
         for (let i = 0; imagesToPage.hits.length > i; i += 1) {
             gallery.insertAdjacentHTML("beforeend", `<div class="photo-card">
             <a href=${imagesToPage.hits[i].largeImageURL}>
-        <img href=${imagesToPage.hits[i].largeImageURL} src=${imagesToPage.hits[i].webformatURL} alt=${imagesToPage.hits[i].tags}  loading="lazy" width="360"/>
-        <div class="info">
-        <p class="info-item">
-          <b>Likes</br>${imagesToPage.hits[i].likes}</b>
-        </p>
-        <p class="info-item">
-          <b>Views</br>${imagesToPage.hits[i].views}</b>
-        </p>
-        <p class="info-item">
-          <b>Comments</br>${imagesToPage.hits[i].comments}</b>
-        </p>
-        <p class="info-item">
-          <b>Downloads</br>${imagesToPage.hits[i].downloads}</b>
-        </p>
-      </div>
-      </a>
-    </div>`);
+            <img src=${imagesToPage.hits[i].webformatURL} alt=${imagesToPage.hits[i].tags}  loading="lazy" width="360"/>
+            </a>
+            <div class="info">
+            <p class="info-item">
+            <b>Likes</br>${imagesToPage.hits[i].likes}</b>
+            </p>
+            <p class="info-item">
+            <b>Views</br>${imagesToPage.hits[i].views}</b>
+            </p>
+            <p class="info-item">
+            <b>Comments</br>${imagesToPage.hits[i].comments}</b>
+            </p>
+            <p class="info-item">
+            <b>Downloads</br>${imagesToPage.hits[i].downloads}</b>
+            </p>
+            </div>
+            
+            </div>`);
         };
 
         page += 1;
