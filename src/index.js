@@ -52,7 +52,7 @@ async function searchImages(text, numberOfPage) {
 async function build() {
     const imagesToPage = await searchImages(value, page);
     try {
-        for (let i = 0; imagesToPage.hits.length >= i; i += 1) {
+        for (let i = 0; imagesToPage.hits.length > i; i += 1) {
             gallery.insertAdjacentHTML("beforeend", `<div class="photo-card">
       <img src=${imagesToPage.hits[i].webformatURL} alt=${imagesToPage.hits[i].tags} href=${imagesToPage.hits[i].largeImageURL} loading="lazy" width="360"/>
       <div class="info">
