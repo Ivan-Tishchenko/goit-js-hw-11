@@ -6,7 +6,7 @@ import Notiflix from "notiflix";
 const form = document.querySelector("#search-form");
 form.addEventListener("submit", serch)
 const input = document.querySelector("input");
-const gallery = document.querySelector(".gallery");
+const galleryEl = document.querySelector(".gallery");
 const buttonLodeMore = document.querySelector(".load-more");
 buttonLodeMore.addEventListener("click", build);
 
@@ -57,9 +57,9 @@ async function build() {
     const imagesToPage = await searchImages(value, page);
     try {
         for (let i = 0; imagesToPage.hits.length > i; i += 1) {
-            gallery.insertAdjacentHTML("beforeend", `<a href=${imagesToPage.hits[i].largeImageURL}>
+            galleryEl.insertAdjacentHTML("beforeend", `<a class="gallery__link" href=${imagesToPage.hits[i].largeImageURL}>
             <div class="photo-card">
-            <img src=${imagesToPage.hits[i].webformatURL} alt=${imagesToPage.hits[i].tags}  loading="lazy" width="360"/>
+            <img src=${imagesToPage.hits[i].webformatURL} alt=${imagesToPage.hits[i].tags} href=${imagesToPage.hits[i].largeImageURL} loading="lazy" width="360"/>
             <div class="info">
             <p class="info-item">
             <b>Likes</br>${imagesToPage.hits[i].likes}</b>
@@ -86,8 +86,23 @@ async function build() {
 }
 
 function clear() {
-    [...gallery.children].forEach(element => element.remove());
-    console.log(gallery.children)
+    [...galleryEl.children].forEach(element => element.remove());
+    console.log(galleryEl.children)
 }
 
-let galleryActive = new SimpleLightbox('.gallery a');
+galleryEl.addEventListener("click", openImg);
+let gallery = new SimpleLightbox('.gallery a');
+
+
+gallery.defaultOptions.captions = true;
+gallery.defaultOptions.captionsData = "alt";
+gallery.defaultOptions.captionDelay = 250;
+
+
+
+function openImg(event) {
+    event.preventDefault();
+    
+    gallery.open(event.target);
+        
+    }
