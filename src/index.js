@@ -15,6 +15,8 @@ let page = 1;
 async function serch(event) {
     event.preventDefault();
 
+    clear()
+
     if (value === input.value.trim()) {
         return;
     }
@@ -77,4 +79,9 @@ async function build() {
         console.log(error);
     }
     return;
+}
+
+function clear() {
+    [...gallery.children].forEach(element => element.remove());
+    console.log(gallery.children)
 }
